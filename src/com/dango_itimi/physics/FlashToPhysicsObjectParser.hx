@@ -20,9 +20,9 @@ class FlashToPhysicsObjectParser {
 	public var circleMap(default, null):Map<DisplayObject, Map<DisplayObject, PhysicsObject>>;
 	public var polygonMap(default, null):Map<DisplayObject, Map<DisplayObject, PhysicsObject>>;
 
-	public var anonymousBoxSet(default, null):Array<PhysicsObject>;
-	public var anonymousCircleSet(default, null):Array<PhysicsObject>;
-	public var anonymousPolygonSet(default, null):Array<PhysicsObject>;
+	public var anonymousBoxMap(default, null):Map<DisplayObject, Array<PhysicsObject>>;
+	public var anonymousCircleMap(default, null):Map<DisplayObject, Array<PhysicsObject>>;
+	public var anonymousPolygonMap(default, null):Map<DisplayObject, Array<PhysicsObject>>;
 
 	//Anonymous instance property name
 	// Flash document: "instance" + "Number"
@@ -39,10 +39,12 @@ class FlashToPhysicsObjectParser {
 		circleMap = new Map();
 		polygonMap = new Map();
 
-		anonymousBoxSet = [];
-		anonymousCircleSet = [];
-		anonymousPolygonSet = [];
+		anonymousBoxMap = new Map();
+		anonymousCircleMap = new Map();
+		anonymousPolygonMap = new Map();
 	}
+
+	//returned key displayObject
 	public function addDisplayObject(physicsObjectType:PhysicsObjectType, displayObjectClass:Class<DisplayObject>):DisplayObject{
 
 		var displayObject = Type.createInstance(displayObjectClass, []);
@@ -61,21 +63,26 @@ class FlashToPhysicsObjectParser {
 	//
 	public function execute(){
 
-		createMap(PhysicsObject, boxSet, boxMap, anonymousBoxSet);
-		createMap(PhysicsObject, circleSet, circleMap, anonymousCircleSet);
-		createMap(Polygon, polygonSet, polygonMap, anonymousPolygonSet);
+		createMap(PhysicsObject, boxSet, boxMap, anonymousBoxMap);
+		createMap(PhysicsObject, circleSet, circleMap, anonymousCircleMap);
+		createMap(Polygon, polygonSet, polygonMap, anonymousPolygonMap);
 	}
 	private function createMap(
 		physicsObjectClass:Class<PhysicsObject>, displayObjectSet:Array<DisplayObject>,
-		map:Map<DisplayObject, Map<DisplayObject, PhysicsObject>>, anonymousSet:Array<PhysicsObject>
+		map:Map<DisplayObject, Map<DisplayObject, PhysicsObject>>,
+		anonymousMap:Map<DisplayObject, Array<PhysicsObject>>
 	){
 		for(i in 0...displayObjectSet.length){
 
 			var displayObject = displayObjectSet[i];
+
 			var physicsObjectMap:Map<DisplayObject, PhysicsObject> = new Map();
 			map.set(displayObject, physicsObjectMap);
 
-			parse(physicsObjectClass, displayObject, physicsObjectMap, anonymousSet);
+			var anonymousPhysicsObjectSet:Array<PhysicsObject> = [];
+			anonymousMap.set(displayObject, anonymousPhysicsObjectSet);
+
+			parse(physicsObjectClass, displayObject, physicsObjectMap, anonymousPhysicsObjectSet);
 		}
 	}
 	private function parse(
@@ -112,10 +119,10 @@ class FlashToPhysicsObjectParser {
 	}
 
 	//
-	public function getPhysicsObject(physicsObjectType:PhysicsObjectType, displayObject:DisplayObject, displayObjectProperty:DisplayObject):PhysicsObject{
+	public function getPhysicsObject(physicsObjectType:PhysicsObjectType, keyDisplayObject:DisplayObject, keyDisplayObjectProperty:DisplayObject):PhysicsObject{
 
 		var map = getMap(physicsObjectType);
-		return map[displayObject][displayObjectProperty];
+		return map[keyDisplayObject][keyDisplayObjectProperty];
 	}
 	private function getMap(physicsObjectType:PhysicsObjectType):Map<DisplayObject, Map<DisplayObject, PhysicsObject>>{
 
@@ -123,6 +130,21 @@ class FlashToPhysicsObjectParser {
 			case PhysicsObjectType.BOX: boxMap;
 			case PhysicsObjectType.CIRCLE: circleMap;
 			case PhysicsObjectType.POLYGON: polygonMap;
+		}
+	}
+
+	//
+	public function getAnonymousPhysicsObjectSet(physicsObjectType:PhysicsObjectType, keyDisplayObject:DisplayObject):Array<PhysicsObject>{
+
+		var map = getAnonymousMap(physicsObjectType);
+		return map[keyDisplayObject];
+	}
+	private function getAnonymousMap(physicsObjectType:PhysicsObjectType):Map<DisplayObject, Array<PhysicsObject>>{
+
+		return switch(physicsObjectType){
+			case PhysicsObjectType.BOX: anonymousBoxMap;
+			case PhysicsObjectType.CIRCLE: anonymousCircleMap;
+			case PhysicsObjectType.POLYGON: anonymousPolygonMap;
 		}
 	}
 }

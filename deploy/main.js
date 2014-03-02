@@ -20,9 +20,10 @@ Main.prototype = {
 		console.log(polygon);
 		polygon = this.flashToPhysicsObjectParser.getPhysicsObject(com.dango_itimi.physics.PhysicsObjectType.POLYGON,this.samplePolygon,this.samplePolygon.polygon1);
 		console.log(polygon);
-		var _g = 0, _g1 = this.flashToPhysicsObjectParser.anonymousPolygonSet;
-		while(_g < _g1.length) {
-			var anonymousPhysicsObject = _g1[_g];
+		var anonymousSet = this.flashToPhysicsObjectParser.getAnonymousPhysicsObjectSet(com.dango_itimi.physics.PhysicsObjectType.POLYGON,this.samplePolygon);
+		var _g = 0;
+		while(_g < anonymousSet.length) {
+			var anonymousPhysicsObject = anonymousSet[_g];
 			++_g;
 			console.log(anonymousPhysicsObject);
 		}
@@ -34,9 +35,10 @@ Main.prototype = {
 		console.log(physicsObject);
 		physicsObject = this.flashToPhysicsObjectParser.getPhysicsObject(com.dango_itimi.physics.PhysicsObjectType.CIRCLE,this.sampleCircle,this.sampleCircle.circle1);
 		console.log(physicsObject);
-		var _g = 0, _g1 = this.flashToPhysicsObjectParser.anonymousCircleSet;
-		while(_g < _g1.length) {
-			var anonymousPhysicsObject = _g1[_g];
+		var anonymousSet = this.flashToPhysicsObjectParser.getAnonymousPhysicsObjectSet(com.dango_itimi.physics.PhysicsObjectType.CIRCLE,this.sampleCircle);
+		var _g = 0;
+		while(_g < anonymousSet.length) {
+			var anonymousPhysicsObject = anonymousSet[_g];
 			++_g;
 			console.log(anonymousPhysicsObject);
 		}
@@ -48,9 +50,10 @@ Main.prototype = {
 		console.log(physicsObject);
 		physicsObject = this.flashToPhysicsObjectParser.getPhysicsObject(com.dango_itimi.physics.PhysicsObjectType.BOX,this.sampleBox,this.sampleBox.slope);
 		console.log(physicsObject);
-		var _g = 0, _g1 = this.flashToPhysicsObjectParser.anonymousBoxSet;
-		while(_g < _g1.length) {
-			var anonymousPhysicsObject = _g1[_g];
+		var anonymousSet = this.flashToPhysicsObjectParser.getAnonymousPhysicsObjectSet(com.dango_itimi.physics.PhysicsObjectType.BOX,this.sampleBox);
+		var _g = 0;
+		while(_g < anonymousSet.length) {
+			var anonymousPhysicsObject = anonymousSet[_g];
 			++_g;
 			console.log(anonymousPhysicsObject);
 		}
@@ -150,13 +153,34 @@ com.dango_itimi.physics.FlashToPhysicsObjectParser = function() {
 	this.boxMap = new haxe.ds.ObjectMap();
 	this.circleMap = new haxe.ds.ObjectMap();
 	this.polygonMap = new haxe.ds.ObjectMap();
-	this.anonymousBoxSet = [];
-	this.anonymousCircleSet = [];
-	this.anonymousPolygonSet = [];
+	this.anonymousBoxMap = new haxe.ds.ObjectMap();
+	this.anonymousCircleMap = new haxe.ds.ObjectMap();
+	this.anonymousPolygonMap = new haxe.ds.ObjectMap();
 };
 com.dango_itimi.physics.FlashToPhysicsObjectParser.__name__ = true;
 com.dango_itimi.physics.FlashToPhysicsObjectParser.prototype = {
-	getMap: function(physicsObjectType) {
+	getAnonymousMap: function(physicsObjectType) {
+		return (function($this) {
+			var $r;
+			switch( (physicsObjectType)[1] ) {
+			case 0:
+				$r = $this.anonymousBoxMap;
+				break;
+			case 1:
+				$r = $this.anonymousCircleMap;
+				break;
+			case 2:
+				$r = $this.anonymousPolygonMap;
+				break;
+			}
+			return $r;
+		}(this));
+	}
+	,getAnonymousPhysicsObjectSet: function(physicsObjectType,keyDisplayObject) {
+		var map = this.getAnonymousMap(physicsObjectType);
+		return map.h[keyDisplayObject.__id__];
+	}
+	,getMap: function(physicsObjectType) {
 		return (function($this) {
 			var $r;
 			switch( (physicsObjectType)[1] ) {
@@ -173,9 +197,9 @@ com.dango_itimi.physics.FlashToPhysicsObjectParser.prototype = {
 			return $r;
 		}(this));
 	}
-	,getPhysicsObject: function(physicsObjectType,displayObject,displayObjectProperty) {
+	,getPhysicsObject: function(physicsObjectType,keyDisplayObject,keyDisplayObjectProperty) {
 		var map = this.getMap(physicsObjectType);
-		return map.h[displayObject.__id__].h[displayObjectProperty.__id__];
+		return map.h[keyDisplayObject.__id__].h[keyDisplayObjectProperty.__id__];
 	}
 	,parse: function(physicsObjectClass,displayObject,physicsObjectMap,anonymousSet) {
 		var movieClip = displayObject;
@@ -198,20 +222,22 @@ com.dango_itimi.physics.FlashToPhysicsObjectParser.prototype = {
 			if(instanceName.indexOf("instance") != -1) anonymousSet.push(physicsObject); else physicsObjectMap.set(shapeInstance,physicsObject);
 		}
 	}
-	,createMap: function(physicsObjectClass,displayObjectSet,map,anonymousSet) {
+	,createMap: function(physicsObjectClass,displayObjectSet,map,anonymousMap) {
 		var _g1 = 0, _g = displayObjectSet.length;
 		while(_g1 < _g) {
 			var i = _g1++;
 			var displayObject = displayObjectSet[i];
 			var physicsObjectMap = new haxe.ds.ObjectMap();
 			map.set(displayObject,physicsObjectMap);
-			this.parse(physicsObjectClass,displayObject,physicsObjectMap,anonymousSet);
+			var anonymousPhysicsObjectSet = [];
+			anonymousMap.set(displayObject,anonymousPhysicsObjectSet);
+			this.parse(physicsObjectClass,displayObject,physicsObjectMap,anonymousPhysicsObjectSet);
 		}
 	}
 	,execute: function() {
-		this.createMap(com.dango_itimi.physics.PhysicsObject,this.boxSet,this.boxMap,this.anonymousBoxSet);
-		this.createMap(com.dango_itimi.physics.PhysicsObject,this.circleSet,this.circleMap,this.anonymousCircleSet);
-		this.createMap(com.dango_itimi.physics.Polygon,this.polygonSet,this.polygonMap,this.anonymousPolygonSet);
+		this.createMap(com.dango_itimi.physics.PhysicsObject,this.boxSet,this.boxMap,this.anonymousBoxMap);
+		this.createMap(com.dango_itimi.physics.PhysicsObject,this.circleSet,this.circleMap,this.anonymousCircleMap);
+		this.createMap(com.dango_itimi.physics.Polygon,this.polygonSet,this.polygonMap,this.anonymousPolygonMap);
 	}
 	,getSet: function(physicsObjectType) {
 		return (function($this) {
