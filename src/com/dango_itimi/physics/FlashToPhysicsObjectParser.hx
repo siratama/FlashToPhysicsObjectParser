@@ -10,7 +10,6 @@ import flash.display.DisplayObject;
 
 class FlashToPhysicsObjectParser {
 
-
 	public var boxSet:Array<DisplayObject>;
 	public var circleSet:Array<DisplayObject>;
 	public var polygonSet:Array<DisplayObject>;
@@ -30,7 +29,7 @@ class FlashToPhysicsObjectParser {
 	// HTML5 canvas document: "instance" or "instance" + "_" + "SerialNumber"
 	private static inline var ANONYMOUS_INSTANCE:String = "instance";
 
-	public function new() {
+	public function new(){
 
 		boxSet = [];
 		circleSet = [];
@@ -47,7 +46,7 @@ class FlashToPhysicsObjectParser {
 	public function addDisplayObject(physicsObjectType:PhysicsObjectType, displayObjectClass:Class<DisplayObject>):DisplayObject{
 
 		var displayObject = Type.createInstance(displayObjectClass, []);
-	    getSet(physicsObjectType).push(displayObject);
+		getSet(physicsObjectType).push(displayObject);
 		return displayObject;
 	}
 	private function getSet(physicsObjectType:PhysicsObjectType):Array<DisplayObject>{
@@ -58,7 +57,9 @@ class FlashToPhysicsObjectParser {
 			case PhysicsObjectType.POLYGON: polygonSet;
 		}
 	}
-	public function execute() {
+
+	//
+	public function execute(){
 
 		createMap(PhysicsObject, boxSet, boxMap, anonymousBoxSet);
 		createMap(PhysicsObject, circleSet, circleMap, anonymousCircleSet);
@@ -68,8 +69,7 @@ class FlashToPhysicsObjectParser {
 		physicsObjectClass:Class<PhysicsObject>, displayObjectSet:Array<DisplayObject>,
 		map:Map<DisplayObject, Map<DisplayObject, PhysicsObject>>, anonymousSet:Array<PhysicsObject>
 	){
-
-		for (i in 0...displayObjectSet.length){
+		for(i in 0...displayObjectSet.length){
 
 			var displayObject = displayObjectSet[i];
 			var physicsObjectMap:Map<DisplayObject, PhysicsObject> = new Map();
@@ -81,13 +81,12 @@ class FlashToPhysicsObjectParser {
 	private function parse(
 		physicsObjectClass:Class<PhysicsObject>, displayObject:DisplayObject,
 		physicsObjectMap:Map<DisplayObject, PhysicsObject>, anonymousSet:Array<PhysicsObject>
-	) {
-
+	){
 		var movieClip:MovieClip = cast displayObject;
 		var numChildren:Int =
 			#if js movieClip.getNumChildren(); #else movieClip.numChildren; #end
 
-		for (i in 0...numChildren) {
+		for(i in 0...numChildren){
 
 			var shapeInstance:MovieClip = cast movieClip.getChildAt(i);
 			var instanceName:String = null;
@@ -101,19 +100,19 @@ class FlashToPhysicsObjectParser {
 			}
 			#else
 			instanceName = shapeInstance.name;
-		    #end
+			#end
 
 			var physicsObject:PhysicsObject = Type.createInstance(physicsObjectClass, [shapeInstance]);
 
 			if(instanceName.indexOf(ANONYMOUS_INSTANCE) != -1)
-			    anonymousSet.push(physicsObject);
+				anonymousSet.push(physicsObject);
 			else
 				physicsObjectMap.set(shapeInstance, physicsObject);
 		}
 	}
 
 	//
-	public function getPhysicsObject(physicsObjectType:PhysicsObjectType, displayObject:DisplayObject, displayObjectProperty:DisplayObject):PhysicsObject {
+	public function getPhysicsObject(physicsObjectType:PhysicsObjectType, displayObject:DisplayObject, displayObjectProperty:DisplayObject):PhysicsObject{
 
 		var map = getMap(physicsObjectType);
 		return map[displayObject][displayObjectProperty];
