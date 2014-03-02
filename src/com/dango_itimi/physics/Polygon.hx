@@ -12,7 +12,7 @@ class Polygon extends PhysicsObject {
 
 	//vertex property name is 'VERTEX_MOVIE_CLIP_HEAD_NAME + number'
 	//ex) p0, p1, p2, ...
-	public static inline var VERTEX_MOVIE_CLIP_HEAD_NAME:String = "p";
+	public static var VERTEX_MOVIE_CLIP_HEAD_NAME:String = "p";
 
 	public var vertices(default, null):Array<Point>;
 

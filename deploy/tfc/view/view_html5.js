@@ -77,22 +77,26 @@ p.nominalBounds = new cjs.Rectangle(15,20,149.9,148.9);
 (lib.sampleboxSampleBox = function() {
 	this.initialize();
 
-	// レイヤー 1
+	// 
 	this.wall = new lib.box();
 	this.wall.setTransform(312,84,11.6,58.959);
 
 	this.slope = new lib.box();
 	this.slope.setTransform(280,177,58,22,-24.2);
 
-	this.instance = new lib.box();
-	this.instance.setTransform(93,175,58,22,25);
-
 	this.floor = new lib.box();
 	this.floor.setTransform(86,52,58,22);
 
-	this.addChild(this.floor,this.instance,this.slope,this.wall);
+	// anonymous
+	this.instance = new lib.box();
+	this.instance.setTransform(227,251,205.9,11,-9);
+
+	this.instance_1 = new lib.box();
+	this.instance_1.setTransform(93,175,58,22,25);
+
+	this.addChild(this.instance_1,this.instance,this.floor,this.slope,this.wall);
 }).prototype = p = new cjs.Container();
-p.nominalBounds = new cjs.Rectangle(28,25.1,314,195.8);
+p.nominalBounds = new cjs.Rectangle(22,25.1,410.1,269);
 
 
 (lib._1 = function() {
@@ -144,16 +148,20 @@ p.nominalBounds = new cjs.Rectangle(-2,-2,56,16);
 (lib.samplepolygonSamplePolygon = function() {
 	this.initialize();
 
-	// レイヤー 1
+	// anonymous
+	this.instance = new lib._0();
+	this.instance.setTransform(281,15,1,1,0,0,0,26,6);
+
+	//  
 	this.polygon1 = new lib._1();
 	this.polygon1.setTransform(140,87);
 
 	this.polygon0 = new lib._0();
 	this.polygon0.setTransform(30,34);
 
-	this.addChild(this.polygon0,this.polygon1);
+	this.addChild(this.polygon0,this.polygon1,this.instance);
 }).prototype = p = new cjs.Container();
-p.nominalBounds = new cjs.Rectangle(28,32,228,141);
+p.nominalBounds = new cjs.Rectangle(28,7,281,166);
 
 })(lib = lib||{}, images = images||{}, createjs = createjs||{});
 var lib, images, createjs;

@@ -51,14 +51,22 @@ class Main {
 	//
 	private function outputBox(){
 
+		trace("---");
+
 		var physicsObject:PhysicsObject;
 		physicsObject = flashToPhysicsObjectParser.getPhysicsObject(PhysicsObjectType.BOX, sampleBox, sampleBox.floor);
 		trace(physicsObject);
 
 		physicsObject = flashToPhysicsObjectParser.getPhysicsObject(PhysicsObjectType.BOX, sampleBox, sampleBox.slope);
 		trace(physicsObject);
+
+		for(anonymousPhysicsObject in flashToPhysicsObjectParser.anonymousBoxSet)
+			trace(anonymousPhysicsObject);
+
 	}
 	private function outputCircle(){
+
+		trace("---");
 
 		var physicsObject:PhysicsObject;
 		physicsObject = flashToPhysicsObjectParser.getPhysicsObject(PhysicsObjectType.CIRCLE, sampleCircle, sampleCircle.circle0);
@@ -66,8 +74,13 @@ class Main {
 
 		physicsObject = flashToPhysicsObjectParser.getPhysicsObject(PhysicsObjectType.CIRCLE, sampleCircle, sampleCircle.circle1);
 		trace(physicsObject);
+
+		for(anonymousPhysicsObject in flashToPhysicsObjectParser.anonymousCircleSet)
+			trace(anonymousPhysicsObject);
 	}
 	private function outputPolygon(){
+
+		trace("---");
 
 		var polygon:Polygon;
 		polygon = cast flashToPhysicsObjectParser.getPhysicsObject(PhysicsObjectType.POLYGON, samplePolygon, samplePolygon.polygon0);
@@ -75,5 +88,8 @@ class Main {
 
 		polygon = cast flashToPhysicsObjectParser.getPhysicsObject(PhysicsObjectType.POLYGON, samplePolygon, samplePolygon.polygon1);
 		trace(polygon);
+
+		for(anonymousPhysicsObject in flashToPhysicsObjectParser.anonymousPolygonSet)
+			trace(anonymousPhysicsObject);
 	}
 }
