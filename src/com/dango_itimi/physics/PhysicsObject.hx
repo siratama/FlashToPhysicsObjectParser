@@ -10,8 +10,8 @@ import flash.display.MovieClip;
 
 class PhysicsObject {
 
-	public var originalX(default, null):Float;
-	public var originalY(default, null):Float;
+	public var x(default, null):Float;
+	public var y(default, null):Float;
 	public var width(default, null):Float;
 	public var height(default, null):Float;
 
@@ -35,8 +35,20 @@ class PhysicsObject {
 		height = bounds.height;
 		#end
 
-		originalX = shapeInstance.x;
-		originalY = shapeInstance.y;
+		x = shapeInstance.x;
+		y = shapeInstance.y;
 		shapeInstance.rotation = degree;
+	}
+
+	public function toString():String{
+
+	    return [
+		    'x: $x, ',
+			'y: $y, ',
+			'width: $width, ',
+			'height: $height, ',
+			'degree: $degree, ',
+			'radian: $radian, '
+		].join("");
 	}
 }

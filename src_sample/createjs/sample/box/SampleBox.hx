@@ -5,5 +5,6 @@ extern class SampleBox extends createjs.easeljs.Container{
 
 
 	public var floor:createjs.easeljs.MovieClip;
+	public var slope:createjs.easeljs.MovieClip;
 	public var wall:createjs.easeljs.MovieClip;
 }

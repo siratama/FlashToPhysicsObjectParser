@@ -1,11 +1,6 @@
 package;
 
 import js.Browser;
-import sample.box.SampleBox;
-
-import com.dango_itimi.physics.PhysicsObject;
-import com.dango_itimi.physics.PhysicsObjectType;
-import com.dango_itimi.physics.FlashToPhysicsObjectParser;
 
 class MainForJS extends Main{
 

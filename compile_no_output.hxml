@@ -1,7 +1,7 @@
 -swf deploy/main.swf
--main Main
+-main MainForFlash
 -swf-version 11
--swf-header 650:400:24:ffffff
+-swf-header 650:400:24:000000
 -swf-lib fla/view.swf
 -cp src
 -cp src_sample/app

@@ -30,9 +30,11 @@ class FlashToPhysicsObjectParser {
 		circleMap = new Map();
 		polygonMap = new Map();
 	}
-	public function addDisplayObject(physicsObjectType:PhysicsObjectType, displayObject:DisplayObject){
+	public function addDisplayObject(physicsObjectType:PhysicsObjectType, displayObjectClass:Class<DisplayObject>):DisplayObject{
 
+		var displayObject = Type.createInstance(displayObjectClass, []);
 	    getSet(physicsObjectType).push(displayObject);
+		return displayObject;
 	}
 	private function getSet(physicsObjectType:PhysicsObjectType):Array<DisplayObject>{
 

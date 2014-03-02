@@ -19,7 +19,6 @@ class Polygon extends PhysicsObject {
 	public function new(shapeInstance:MovieClip){
 
 	    super(shapeInstance);
-
 		vertices = [];
 
 		var numChildren:Int =
@@ -27,13 +26,25 @@ class Polygon extends PhysicsObject {
 
 		for(i in 0...numChildren){
 
-			var vertex:MovieClip = cast shapeInstance.getChildByName(VERTEX_MOVIE_CLIP_HEAD_NAME + i);
+			var vertex:MovieClip =
+				#if js
+				Reflect.field(shapeInstance, VERTEX_MOVIE_CLIP_HEAD_NAME + i);
+				#else
+				cast shapeInstance.getChildByName(VERTEX_MOVIE_CLIP_HEAD_NAME + i);
+				#end
+
 			if(vertex != null)
 				vertices.push(new Point(vertex.x, vertex.y));
 		}
+	}
+	override public function toString():String{
 
-		if(numChildren != vertices.length){
-			throw this + "vertex property number error";
+		var str = super.toString();
+		str += "\n{";
+		for(vertex in vertices){
+		    str += '{${vertex.x}, ${vertex.y}} ';
 		}
+		str += "}";
+		return str;
 	}
 }

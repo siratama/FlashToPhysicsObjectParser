@@ -6,6 +6,7 @@ class MainForFlash extends Main{
 		new MainForFlash();
 	}
 	public function new(){
+		super();
 		parse();
 	}
 }
