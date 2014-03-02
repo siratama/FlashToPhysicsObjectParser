@@ -1,0 +1,17 @@
+-swf deploy/main.swf
+-main Main
+-swf-version 11
+-swf-header 650:400:24:ffffff
+-swf-lib fla/view.swf
+-cp src
+-cp src_sample/app
+-cp src_sample/flash_extern
+
+--next
+
+-js deploy/main.js
+-main MainForJS
+-cp src
+-cp src_sample/app
+-cp src_sample/createjs
+-lib createjs
