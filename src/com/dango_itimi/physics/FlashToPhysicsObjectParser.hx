@@ -2,9 +2,11 @@ package com.dango_itimi.physics;
 
 #if js
 import createjs.easeljs.MovieClip;
+import createjs.easeljs.Container;
 import createjs.easeljs.DisplayObject;
 #else
 import flash.display.MovieClip;
+import flash.display.DisplayObjectContainer;
 import flash.display.DisplayObject;
 #end
 
@@ -89,18 +91,20 @@ class FlashToPhysicsObjectParser {
 		physicsObjectClass:Class<PhysicsObject>, displayObject:DisplayObject,
 		physicsObjectMap:Map<DisplayObject, PhysicsObject>, anonymousSet:Array<PhysicsObject>
 	){
-		var movieClip:MovieClip = cast displayObject;
+		var container =
+			cast(displayObject, #if js Container #else DisplayObjectContainer #end);
+
 		var numChildren:Int =
-			#if js movieClip.getNumChildren(); #else movieClip.numChildren; #end
+			#if js container.getNumChildren(); #else container.numChildren; #end
 
 		for(i in 0...numChildren){
 
-			var shapeInstance:MovieClip = cast movieClip.getChildAt(i);
+			var shapeInstance:MovieClip = cast container.getChildAt(i);
 			var instanceName:String = null;
 
 			#if js
-			for(prop in Reflect.fields(movieClip)){
-				if(Reflect.field(movieClip, prop) == shapeInstance){
+			for(prop in Reflect.fields(container)){
+				if(Reflect.field(container, prop) == shapeInstance){
 					instanceName = prop;
 					break;
 				}

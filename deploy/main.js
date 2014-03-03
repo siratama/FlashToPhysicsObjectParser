@@ -116,6 +116,11 @@ Reflect.fields = function(o) {
 	}
 	return a;
 }
+var Std = function() { }
+Std.__name__ = true;
+Std.string = function(s) {
+	return js.Boot.__string_rec(s,"");
+}
 var Type = function() { }
 Type.__name__ = true;
 Type.createInstance = function(cl,args) {
@@ -202,18 +207,18 @@ com.dango_itimi.physics.FlashToPhysicsObjectParser.prototype = {
 		return map.h[keyDisplayObject.__id__].h[keyDisplayObjectProperty.__id__];
 	}
 	,parse: function(physicsObjectClass,displayObject,physicsObjectMap,anonymousSet) {
-		var movieClip = displayObject;
-		var numChildren = movieClip.getNumChildren();
+		var container = js.Boot.__cast(displayObject , createjs.Container);
+		var numChildren = container.getNumChildren();
 		var _g = 0;
 		while(_g < numChildren) {
 			var i = _g++;
-			var shapeInstance = movieClip.getChildAt(i);
+			var shapeInstance = container.getChildAt(i);
 			var instanceName = null;
-			var _g1 = 0, _g2 = Reflect.fields(movieClip);
+			var _g1 = 0, _g2 = Reflect.fields(container);
 			while(_g1 < _g2.length) {
 				var prop = _g2[_g1];
 				++_g1;
-				if(Reflect.field(movieClip,prop) == shapeInstance) {
+				if(Reflect.field(container,prop) == shapeInstance) {
 					instanceName = prop;
 					break;
 				}
@@ -338,6 +343,72 @@ haxe.ds.ObjectMap.prototype = {
 var js = {}
 js.Boot = function() { }
 js.Boot.__name__ = true;
+js.Boot.__string_rec = function(o,s) {
+	if(o == null) return "null";
+	if(s.length >= 5) return "<...>";
+	var t = typeof(o);
+	if(t == "function" && (o.__name__ || o.__ename__)) t = "object";
+	switch(t) {
+	case "object":
+		if(o instanceof Array) {
+			if(o.__enum__) {
+				if(o.length == 2) return o[0];
+				var str = o[0] + "(";
+				s += "\t";
+				var _g1 = 2, _g = o.length;
+				while(_g1 < _g) {
+					var i = _g1++;
+					if(i != 2) str += "," + js.Boot.__string_rec(o[i],s); else str += js.Boot.__string_rec(o[i],s);
+				}
+				return str + ")";
+			}
+			var l = o.length;
+			var i;
+			var str = "[";
+			s += "\t";
+			var _g = 0;
+			while(_g < l) {
+				var i1 = _g++;
+				str += (i1 > 0?",":"") + js.Boot.__string_rec(o[i1],s);
+			}
+			str += "]";
+			return str;
+		}
+		var tostr;
+		try {
+			tostr = o.toString;
+		} catch( e ) {
+			return "???";
+		}
+		if(tostr != null && tostr != Object.toString) {
+			var s2 = o.toString();
+			if(s2 != "[object Object]") return s2;
+		}
+		var k = null;
+		var str = "{\n";
+		s += "\t";
+		var hasp = o.hasOwnProperty != null;
+		for( var k in o ) { ;
+		if(hasp && !o.hasOwnProperty(k)) {
+			continue;
+		}
+		if(k == "prototype" || k == "__class__" || k == "__super__" || k == "__interfaces__" || k == "__properties__") {
+			continue;
+		}
+		if(str.length != 2) str += ", \n";
+		str += s + k + " : " + js.Boot.__string_rec(o[k],s);
+		}
+		s = s.substring(1);
+		str += "\n" + s + "}";
+		return str;
+	case "function":
+		return "<function>";
+	case "string":
+		return o;
+	default:
+		return String(o);
+	}
+}
 js.Boot.__interfLoop = function(cc,cl) {
 	if(cc == null) return false;
 	if(cc == cl) return true;
@@ -379,6 +450,9 @@ js.Boot.__instanceof = function(o,cl) {
 		if(cl == Enum && o.__ename__ != null) return true;
 		return o.__enum__ == cl;
 	}
+}
+js.Boot.__cast = function(o,t) {
+	if(js.Boot.__instanceof(o,t)) return o; else throw "Cannot cast " + Std.string(o) + " to " + Std.string(t);
 }
 js.Browser = function() { }
 js.Browser.__name__ = true;
