@@ -1,7 +1,7 @@
 (function () { "use strict";
 var $estr = function() { return js.Boot.__string_rec(this,''); };
 function $extend(from, fields) {
-	function inherit() {}; inherit.prototype = from; var proto = new inherit();
+	function Inherit() {} Inherit.prototype = from; var proto = new Inherit();
 	for (var name in fields) proto[name] = fields[name];
 	if( fields.toString !== Object.prototype.toString ) proto.toString = fields.toString;
 	return proto;
@@ -11,16 +11,35 @@ var Main = function() {
 Main.__name__ = true;
 Main.main = function() {
 	new Main();
-}
+};
 Main.prototype = {
-	outputPolygon: function() {
+	parse: function() {
+		this.flashToPhysicsObjectParser = new com.dango_itimi.physics.FlashToPhysicsObjectParser();
+		this.addBox();
+		this.addCircle();
+		this.addPolygon();
+		this.flashToPhysicsObjectParser.execute();
+		this.outputBox();
+		this.outputCircle();
+		this.outputPolygon();
+	}
+	,addBox: function() {
+		this.sampleBox = this.flashToPhysicsObjectParser.addDisplayObject(com.dango_itimi.physics.PhysicsObjectType.BOX,lib.sampleboxSampleBox);
+	}
+	,addCircle: function() {
+		this.sampleCircle = this.flashToPhysicsObjectParser.addDisplayObject(com.dango_itimi.physics.PhysicsObjectType.CIRCLE,lib.samplecircleSampleCircle);
+	}
+	,addPolygon: function() {
+		this.samplePolygon = this.flashToPhysicsObjectParser.addDisplayObject(com.dango_itimi.physics.PhysicsObjectType.POLYGON,lib.samplepolygonSamplePolygon);
+	}
+	,outputBox: function() {
 		console.log("---");
-		var polygon;
-		polygon = this.flashToPhysicsObjectParser.getPhysicsObject(com.dango_itimi.physics.PhysicsObjectType.POLYGON,this.samplePolygon,this.samplePolygon.polygon0);
-		console.log(polygon);
-		polygon = this.flashToPhysicsObjectParser.getPhysicsObject(com.dango_itimi.physics.PhysicsObjectType.POLYGON,this.samplePolygon,this.samplePolygon.polygon1);
-		console.log(polygon);
-		var anonymousSet = this.flashToPhysicsObjectParser.getAnonymousPhysicsObjectSet(com.dango_itimi.physics.PhysicsObjectType.POLYGON,this.samplePolygon);
+		var physicsObject;
+		physicsObject = this.flashToPhysicsObjectParser.getPhysicsObject(this.sampleBox,this.sampleBox.floor);
+		console.log(physicsObject);
+		physicsObject = this.flashToPhysicsObjectParser.getPhysicsObject(this.sampleBox,this.sampleBox.slope);
+		console.log(physicsObject);
+		var anonymousSet = this.flashToPhysicsObjectParser.getAnonymousPhysicsObjectSet(this.sampleBox);
 		var _g = 0;
 		while(_g < anonymousSet.length) {
 			var anonymousPhysicsObject = anonymousSet[_g];
@@ -31,11 +50,11 @@ Main.prototype = {
 	,outputCircle: function() {
 		console.log("---");
 		var physicsObject;
-		physicsObject = this.flashToPhysicsObjectParser.getPhysicsObject(com.dango_itimi.physics.PhysicsObjectType.CIRCLE,this.sampleCircle,this.sampleCircle.circle0);
+		physicsObject = this.flashToPhysicsObjectParser.getPhysicsObject(this.sampleCircle,this.sampleCircle.circle0);
 		console.log(physicsObject);
-		physicsObject = this.flashToPhysicsObjectParser.getPhysicsObject(com.dango_itimi.physics.PhysicsObjectType.CIRCLE,this.sampleCircle,this.sampleCircle.circle1);
+		physicsObject = this.flashToPhysicsObjectParser.getPhysicsObject(this.sampleCircle,this.sampleCircle.circle1);
 		console.log(physicsObject);
-		var anonymousSet = this.flashToPhysicsObjectParser.getAnonymousPhysicsObjectSet(com.dango_itimi.physics.PhysicsObjectType.CIRCLE,this.sampleCircle);
+		var anonymousSet = this.flashToPhysicsObjectParser.getAnonymousPhysicsObjectSet(this.sampleCircle);
 		var _g = 0;
 		while(_g < anonymousSet.length) {
 			var anonymousPhysicsObject = anonymousSet[_g];
@@ -43,50 +62,31 @@ Main.prototype = {
 			console.log(anonymousPhysicsObject);
 		}
 	}
-	,outputBox: function() {
+	,outputPolygon: function() {
 		console.log("---");
-		var physicsObject;
-		physicsObject = this.flashToPhysicsObjectParser.getPhysicsObject(com.dango_itimi.physics.PhysicsObjectType.BOX,this.sampleBox,this.sampleBox.floor);
-		console.log(physicsObject);
-		physicsObject = this.flashToPhysicsObjectParser.getPhysicsObject(com.dango_itimi.physics.PhysicsObjectType.BOX,this.sampleBox,this.sampleBox.slope);
-		console.log(physicsObject);
-		var anonymousSet = this.flashToPhysicsObjectParser.getAnonymousPhysicsObjectSet(com.dango_itimi.physics.PhysicsObjectType.BOX,this.sampleBox);
+		var polygon;
+		polygon = this.flashToPhysicsObjectParser.getPhysicsObject(this.samplePolygon,this.samplePolygon.polygon0);
+		console.log(polygon);
+		polygon = this.flashToPhysicsObjectParser.getPhysicsObject(this.samplePolygon,this.samplePolygon.polygon1);
+		console.log(polygon);
+		var anonymousSet = this.flashToPhysicsObjectParser.getAnonymousPhysicsObjectSet(this.samplePolygon);
 		var _g = 0;
 		while(_g < anonymousSet.length) {
 			var anonymousPhysicsObject = anonymousSet[_g];
 			++_g;
 			console.log(anonymousPhysicsObject);
 		}
-	}
-	,addPolygon: function() {
-		this.samplePolygon = this.flashToPhysicsObjectParser.addDisplayObject(com.dango_itimi.physics.PhysicsObjectType.POLYGON,lib.samplepolygonSamplePolygon);
-	}
-	,addCircle: function() {
-		this.sampleCircle = this.flashToPhysicsObjectParser.addDisplayObject(com.dango_itimi.physics.PhysicsObjectType.CIRCLE,lib.samplecircleSampleCircle);
-	}
-	,addBox: function() {
-		this.sampleBox = this.flashToPhysicsObjectParser.addDisplayObject(com.dango_itimi.physics.PhysicsObjectType.BOX,lib.sampleboxSampleBox);
-	}
-	,parse: function() {
-		this.flashToPhysicsObjectParser = new com.dango_itimi.physics.FlashToPhysicsObjectParser();
-		this.addBox();
-		this.addCircle();
-		this.addPolygon();
-		this.flashToPhysicsObjectParser.execute();
-		this.outputBox();
-		this.outputCircle();
-		this.outputPolygon();
 	}
 	,__class__: Main
-}
+};
 var MainForJS = function() {
-	js.Browser.window.onload = $bind(this,this.initialize);
+	window.onload = $bind(this,this.initialize);
 	Main.call(this);
 };
 MainForJS.__name__ = true;
 MainForJS.main = function() {
 	new MainForJS();
-}
+};
 MainForJS.__super__ = Main;
 MainForJS.prototype = $extend(Main.prototype,{
 	initialize: function(event) {
@@ -94,18 +94,21 @@ MainForJS.prototype = $extend(Main.prototype,{
 	}
 	,__class__: MainForJS
 });
-var IMap = function() { }
+var IMap = function() { };
 IMap.__name__ = true;
-var Reflect = function() { }
+IMap.prototype = {
+	__class__: IMap
+};
+Math.__name__ = true;
+var Reflect = function() { };
 Reflect.__name__ = true;
 Reflect.field = function(o,field) {
-	var v = null;
 	try {
-		v = o[field];
+		return o[field];
 	} catch( e ) {
+		return null;
 	}
-	return v;
-}
+};
 Reflect.fields = function(o) {
 	var a = [];
 	if(o != null) {
@@ -115,16 +118,17 @@ Reflect.fields = function(o) {
 		}
 	}
 	return a;
-}
-var Std = function() { }
+};
+var Std = function() { };
 Std.__name__ = true;
 Std.string = function(s) {
 	return js.Boot.__string_rec(s,"");
-}
-var Type = function() { }
+};
+var Type = function() { };
 Type.__name__ = true;
 Type.createInstance = function(cl,args) {
-	switch(args.length) {
+	var _g = args.length;
+	switch(_g) {
 	case 0:
 		return new cl();
 	case 1:
@@ -147,74 +151,63 @@ Type.createInstance = function(cl,args) {
 		throw "Too many arguments";
 	}
 	return null;
-}
-var com = {}
-com.dango_itimi = {}
-com.dango_itimi.physics = {}
+};
+var com = {};
+com.dango_itimi = {};
+com.dango_itimi.physics = {};
 com.dango_itimi.physics.FlashToPhysicsObjectParser = function() {
-	this.boxSet = [];
-	this.circleSet = [];
-	this.polygonSet = [];
-	this.boxMap = new haxe.ds.ObjectMap();
-	this.circleMap = new haxe.ds.ObjectMap();
-	this.polygonMap = new haxe.ds.ObjectMap();
-	this.anonymousBoxMap = new haxe.ds.ObjectMap();
-	this.anonymousCircleMap = new haxe.ds.ObjectMap();
-	this.anonymousPolygonMap = new haxe.ds.ObjectMap();
+	this.registeredBoxSet = [];
+	this.registeredCircleSet = [];
+	this.registeredPolygonSet = [];
+	this.map = new haxe.ds.ObjectMap();
+	this.anonymousMap = new haxe.ds.ObjectMap();
 };
 com.dango_itimi.physics.FlashToPhysicsObjectParser.__name__ = true;
 com.dango_itimi.physics.FlashToPhysicsObjectParser.prototype = {
-	getAnonymousMap: function(physicsObjectType) {
-		return (function($this) {
-			var $r;
-			switch( (physicsObjectType)[1] ) {
-			case 0:
-				$r = $this.anonymousBoxMap;
-				break;
-			case 1:
-				$r = $this.anonymousCircleMap;
-				break;
-			case 2:
-				$r = $this.anonymousPolygonMap;
-				break;
-			}
-			return $r;
-		}(this));
+	addDisplayObject: function(physicsObjectType,displayObjectClass) {
+		var displayObject = Type.createInstance(displayObjectClass,[]);
+		this.getRegisteredSet(physicsObjectType).push(displayObject);
+		return displayObject;
 	}
-	,getAnonymousPhysicsObjectSet: function(physicsObjectType,keyDisplayObject) {
-		var map = this.getAnonymousMap(physicsObjectType);
-		return map.h[keyDisplayObject.__id__];
+	,getRegisteredSet: function(physicsObjectType) {
+		switch(physicsObjectType[1]) {
+		case 0:
+			return this.registeredBoxSet;
+		case 1:
+			return this.registeredCircleSet;
+		case 2:
+			return this.registeredPolygonSet;
+		}
 	}
-	,getMap: function(physicsObjectType) {
-		return (function($this) {
-			var $r;
-			switch( (physicsObjectType)[1] ) {
-			case 0:
-				$r = $this.boxMap;
-				break;
-			case 1:
-				$r = $this.circleMap;
-				break;
-			case 2:
-				$r = $this.polygonMap;
-				break;
-			}
-			return $r;
-		}(this));
+	,execute: function() {
+		this.createMap(com.dango_itimi.physics.PhysicsObject,this.registeredBoxSet);
+		this.createMap(com.dango_itimi.physics.PhysicsObject,this.registeredCircleSet);
+		this.createMap(com.dango_itimi.physics.Polygon,this.registeredPolygonSet);
 	}
-	,getPhysicsObject: function(physicsObjectType,keyDisplayObject,keyDisplayObjectProperty) {
-		var map = this.getMap(physicsObjectType);
-		return map.h[keyDisplayObject.__id__].h[keyDisplayObjectProperty.__id__];
+	,createMap: function(physicsObjectClass,registeredDisplayObjectSet) {
+		var _g1 = 0;
+		var _g = registeredDisplayObjectSet.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			var displayObject = registeredDisplayObjectSet[i];
+			var physicsObjectMap = new haxe.ds.ObjectMap();
+			this.map.set(displayObject,physicsObjectMap);
+			var anonymousPhysicsObjectSet = [];
+			this.anonymousMap.set(displayObject,anonymousPhysicsObjectSet);
+			this.parse(physicsObjectClass,displayObject,physicsObjectMap,anonymousPhysicsObjectSet);
+		}
 	}
 	,parse: function(physicsObjectClass,displayObject,physicsObjectMap,anonymousSet) {
-		var container = js.Boot.__cast(displayObject , createjs.Container);
+		var container;
+		container = js.Boot.__cast(displayObject , createjs.Container);
 		var numChildren = container.getNumChildren();
 		var _g = 0;
 		while(_g < numChildren) {
 			var i = _g++;
 			var shapeInstance = container.getChildAt(i);
 			var instanceName = null;
-			var _g1 = 0, _g2 = Reflect.fields(container);
+			var _g1 = 0;
+			var _g2 = Reflect.fields(container);
 			while(_g1 < _g2.length) {
 				var prop = _g2[_g1];
 				++_g1;
@@ -227,47 +220,15 @@ com.dango_itimi.physics.FlashToPhysicsObjectParser.prototype = {
 			if(instanceName.indexOf("instance") != -1) anonymousSet.push(physicsObject); else physicsObjectMap.set(shapeInstance,physicsObject);
 		}
 	}
-	,createMap: function(physicsObjectClass,displayObjectSet,map,anonymousMap) {
-		var _g1 = 0, _g = displayObjectSet.length;
-		while(_g1 < _g) {
-			var i = _g1++;
-			var displayObject = displayObjectSet[i];
-			var physicsObjectMap = new haxe.ds.ObjectMap();
-			map.set(displayObject,physicsObjectMap);
-			var anonymousPhysicsObjectSet = [];
-			anonymousMap.set(displayObject,anonymousPhysicsObjectSet);
-			this.parse(physicsObjectClass,displayObject,physicsObjectMap,anonymousPhysicsObjectSet);
-		}
+	,getPhysicsObject: function(keyDisplayObject,keyDisplayObjectProperty) {
+		var this1 = this.map.h[keyDisplayObject.__id__];
+		return this1.get(keyDisplayObjectProperty);
 	}
-	,execute: function() {
-		this.createMap(com.dango_itimi.physics.PhysicsObject,this.boxSet,this.boxMap,this.anonymousBoxMap);
-		this.createMap(com.dango_itimi.physics.PhysicsObject,this.circleSet,this.circleMap,this.anonymousCircleMap);
-		this.createMap(com.dango_itimi.physics.Polygon,this.polygonSet,this.polygonMap,this.anonymousPolygonMap);
-	}
-	,getSet: function(physicsObjectType) {
-		return (function($this) {
-			var $r;
-			switch( (physicsObjectType)[1] ) {
-			case 0:
-				$r = $this.boxSet;
-				break;
-			case 1:
-				$r = $this.circleSet;
-				break;
-			case 2:
-				$r = $this.polygonSet;
-				break;
-			}
-			return $r;
-		}(this));
-	}
-	,addDisplayObject: function(physicsObjectType,displayObjectClass) {
-		var displayObject = Type.createInstance(displayObjectClass,[]);
-		this.getSet(physicsObjectType).push(displayObject);
-		return displayObject;
+	,getAnonymousPhysicsObjectSet: function(keyDisplayObject) {
+		return this.anonymousMap.h[keyDisplayObject.__id__];
 	}
 	,__class__: com.dango_itimi.physics.FlashToPhysicsObjectParser
-}
+};
 com.dango_itimi.physics.PhysicsObject = function(shapeInstance) {
 	this.degree = shapeInstance.rotation;
 	this.radian = Math.PI / 180 * this.degree;
@@ -285,8 +246,8 @@ com.dango_itimi.physics.PhysicsObject.prototype = {
 		return ["x: " + this.x + ", ","y: " + this.y + ", ","width: " + this.width + ", ","height: " + this.height + ", ","degree: " + this.degree + ", ","radian: " + this.radian + ", "].join("");
 	}
 	,__class__: com.dango_itimi.physics.PhysicsObject
-}
-com.dango_itimi.physics.PhysicsObjectType = { __ename__ : true, __constructs__ : ["BOX","CIRCLE","POLYGON"] }
+};
+com.dango_itimi.physics.PhysicsObjectType = { __ename__ : true, __constructs__ : ["BOX","CIRCLE","POLYGON"] };
 com.dango_itimi.physics.PhysicsObjectType.BOX = ["BOX",0];
 com.dango_itimi.physics.PhysicsObjectType.BOX.toString = $estr;
 com.dango_itimi.physics.PhysicsObjectType.BOX.__enum__ = com.dango_itimi.physics.PhysicsObjectType;
@@ -313,7 +274,8 @@ com.dango_itimi.physics.Polygon.prototype = $extend(com.dango_itimi.physics.Phys
 	toString: function() {
 		var str = com.dango_itimi.physics.PhysicsObject.prototype.toString.call(this);
 		str += "\n{";
-		var _g = 0, _g1 = this.vertices;
+		var _g = 0;
+		var _g1 = this.vertices;
 		while(_g < _g1.length) {
 			var vertex = _g1[_g];
 			++_g;
@@ -324,8 +286,8 @@ com.dango_itimi.physics.Polygon.prototype = $extend(com.dango_itimi.physics.Phys
 	}
 	,__class__: com.dango_itimi.physics.Polygon
 });
-var haxe = {}
-haxe.ds = {}
+var haxe = {};
+haxe.ds = {};
 haxe.ds.ObjectMap = function() {
 	this.h = { };
 	this.h.__keys__ = { };
@@ -334,15 +296,21 @@ haxe.ds.ObjectMap.__name__ = true;
 haxe.ds.ObjectMap.__interfaces__ = [IMap];
 haxe.ds.ObjectMap.prototype = {
 	set: function(key,value) {
-		var id = key.__id__ != null?key.__id__:key.__id__ = ++haxe.ds.ObjectMap.count;
+		var id = key.__id__ || (key.__id__ = ++haxe.ds.ObjectMap.count);
 		this.h[id] = value;
 		this.h.__keys__[id] = key;
 	}
+	,get: function(key) {
+		return this.h[key.__id__];
+	}
 	,__class__: haxe.ds.ObjectMap
-}
-var js = {}
-js.Boot = function() { }
+};
+var js = {};
+js.Boot = function() { };
 js.Boot.__name__ = true;
+js.Boot.getClass = function(o) {
+	if((o instanceof Array) && o.__enum__ == null) return Array; else return o.__class__;
+};
 js.Boot.__string_rec = function(o,s) {
 	if(o == null) return "null";
 	if(s.length >= 5) return "<...>";
@@ -355,7 +323,8 @@ js.Boot.__string_rec = function(o,s) {
 				if(o.length == 2) return o[0];
 				var str = o[0] + "(";
 				s += "\t";
-				var _g1 = 2, _g = o.length;
+				var _g1 = 2;
+				var _g = o.length;
 				while(_g1 < _g) {
 					var i = _g1++;
 					if(i != 2) str += "," + js.Boot.__string_rec(o[i],s); else str += js.Boot.__string_rec(o[i],s);
@@ -363,16 +332,16 @@ js.Boot.__string_rec = function(o,s) {
 				return str + ")";
 			}
 			var l = o.length;
-			var i;
-			var str = "[";
+			var i1;
+			var str1 = "[";
 			s += "\t";
-			var _g = 0;
-			while(_g < l) {
-				var i1 = _g++;
-				str += (i1 > 0?",":"") + js.Boot.__string_rec(o[i1],s);
+			var _g2 = 0;
+			while(_g2 < l) {
+				var i2 = _g2++;
+				str1 += (i2 > 0?",":"") + js.Boot.__string_rec(o[i2],s);
 			}
-			str += "]";
-			return str;
+			str1 += "]";
+			return str1;
 		}
 		var tostr;
 		try {
@@ -385,22 +354,22 @@ js.Boot.__string_rec = function(o,s) {
 			if(s2 != "[object Object]") return s2;
 		}
 		var k = null;
-		var str = "{\n";
+		var str2 = "{\n";
 		s += "\t";
 		var hasp = o.hasOwnProperty != null;
-		for( var k in o ) { ;
+		for( var k in o ) {
 		if(hasp && !o.hasOwnProperty(k)) {
 			continue;
 		}
 		if(k == "prototype" || k == "__class__" || k == "__super__" || k == "__interfaces__" || k == "__properties__") {
 			continue;
 		}
-		if(str.length != 2) str += ", \n";
-		str += s + k + " : " + js.Boot.__string_rec(o[k],s);
+		if(str2.length != 2) str2 += ", \n";
+		str2 += s + k + " : " + js.Boot.__string_rec(o[k],s);
 		}
 		s = s.substring(1);
-		str += "\n" + s + "}";
-		return str;
+		str2 += "\n" + s + "}";
+		return str2;
 	case "function":
 		return "<function>";
 	case "string":
@@ -408,13 +377,14 @@ js.Boot.__string_rec = function(o,s) {
 	default:
 		return String(o);
 	}
-}
+};
 js.Boot.__interfLoop = function(cc,cl) {
 	if(cc == null) return false;
 	if(cc == cl) return true;
 	var intf = cc.__interfaces__;
 	if(intf != null) {
-		var _g1 = 0, _g = intf.length;
+		var _g1 = 0;
+		var _g = intf.length;
 		while(_g1 < _g) {
 			var i = _g1++;
 			var i1 = intf[i];
@@ -422,7 +392,7 @@ js.Boot.__interfLoop = function(cc,cl) {
 		}
 	}
 	return js.Boot.__interfLoop(cc.__super__,cl);
-}
+};
 js.Boot.__instanceof = function(o,cl) {
 	if(cl == null) return false;
 	switch(cl) {
@@ -434,43 +404,38 @@ js.Boot.__instanceof = function(o,cl) {
 		return typeof(o) == "boolean";
 	case String:
 		return typeof(o) == "string";
+	case Array:
+		return (o instanceof Array) && o.__enum__ == null;
 	case Dynamic:
 		return true;
 	default:
 		if(o != null) {
 			if(typeof(cl) == "function") {
-				if(o instanceof cl) {
-					if(cl == Array) return o.__enum__ == null;
-					return true;
-				}
-				if(js.Boot.__interfLoop(o.__class__,cl)) return true;
+				if(o instanceof cl) return true;
+				if(js.Boot.__interfLoop(js.Boot.getClass(o),cl)) return true;
 			}
 		} else return false;
 		if(cl == Class && o.__name__ != null) return true;
 		if(cl == Enum && o.__ename__ != null) return true;
 		return o.__enum__ == cl;
 	}
-}
+};
 js.Boot.__cast = function(o,t) {
 	if(js.Boot.__instanceof(o,t)) return o; else throw "Cannot cast " + Std.string(o) + " to " + Std.string(t);
-}
-js.Browser = function() { }
-js.Browser.__name__ = true;
+};
 var $_, $fid = 0;
-function $bind(o,m) { if( m == null ) return null; if( m.__id__ == null ) m.__id__ = $fid++; var f; if( o.hx__closures__ == null ) o.hx__closures__ = {}; else f = o.hx__closures__[m.__id__]; if( f == null ) { f = function(){ return f.method.apply(f.scope, arguments); }; f.scope = o; f.method = m; o.hx__closures__[m.__id__] = f; } return f; };
-Math.__name__ = ["Math"];
+function $bind(o,m) { if( m == null ) return null; if( m.__id__ == null ) m.__id__ = $fid++; var f; if( o.hx__closures__ == null ) o.hx__closures__ = {}; else f = o.hx__closures__[m.__id__]; if( f == null ) { f = function(){ return f.method.apply(f.scope, arguments); }; f.scope = o; f.method = m; o.hx__closures__[m.__id__] = f; } return f; }
 Math.NaN = Number.NaN;
 Math.NEGATIVE_INFINITY = Number.NEGATIVE_INFINITY;
 Math.POSITIVE_INFINITY = Number.POSITIVE_INFINITY;
 Math.isFinite = function(i) {
 	return isFinite(i);
 };
-Math.isNaN = function(i) {
-	return isNaN(i);
+Math.isNaN = function(i1) {
+	return isNaN(i1);
 };
 String.prototype.__class__ = String;
 String.__name__ = true;
-Array.prototype.__class__ = Array;
 Array.__name__ = true;
 var Int = { __name__ : ["Int"]};
 var Dynamic = { __name__ : ["Dynamic"]};
@@ -483,8 +448,7 @@ var Enum = { };
 com.dango_itimi.physics.FlashToPhysicsObjectParser.ANONYMOUS_INSTANCE = "instance";
 com.dango_itimi.physics.Polygon.VERTEX_MOVIE_CLIP_HEAD_NAME = "p";
 haxe.ds.ObjectMap.count = 0;
-js.Browser.window = typeof window != "undefined" ? window : null;
 MainForJS.main();
 })();
 
-//@ sourceMappingURL=main.js.map
+//# sourceMappingURL=main.js.map

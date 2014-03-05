@@ -12,71 +12,58 @@ import flash.display.DisplayObject;
 
 class FlashToPhysicsObjectParser {
 
-	public var boxSet:Array<DisplayObject>;
-	public var circleSet:Array<DisplayObject>;
-	public var polygonSet:Array<DisplayObject>;
-
-	//first key: Class
-	//second key: Class.property
-	public var boxMap(default, null):Map<DisplayObject, Map<DisplayObject, PhysicsObject>>;
-	public var circleMap(default, null):Map<DisplayObject, Map<DisplayObject, PhysicsObject>>;
-	public var polygonMap(default, null):Map<DisplayObject, Map<DisplayObject, PhysicsObject>>;
-
-	public var anonymousBoxMap(default, null):Map<DisplayObject, Array<PhysicsObject>>;
-	public var anonymousCircleMap(default, null):Map<DisplayObject, Array<PhysicsObject>>;
-	public var anonymousPolygonMap(default, null):Map<DisplayObject, Array<PhysicsObject>>;
+	//first key: Class Instance
+	//second key: (Class Instance).property
+	public var map(default, null):Map<DisplayObject, Map<DisplayObject, PhysicsObject>>;
+	public var anonymousMap(default, null):Map<DisplayObject, Array<PhysicsObject>>;
 
 	//Anonymous instance property name
 	// Flash document: "instance" + "Number"
 	// HTML5 canvas document: "instance" or "instance" + "_" + "SerialNumber"
 	private static inline var ANONYMOUS_INSTANCE:String = "instance";
 
+	public var registeredBoxSet:Array<DisplayObject>;
+	public var registeredCircleSet:Array<DisplayObject>;
+	public var registeredPolygonSet:Array<DisplayObject>;
+
 	public function new(){
 
-		boxSet = [];
-		circleSet = [];
-		polygonSet = [];
+		map = new Map();
+		anonymousMap = new Map();
 
-		boxMap = new Map();
-		circleMap = new Map();
-		polygonMap = new Map();
-
-		anonymousBoxMap = new Map();
-		anonymousCircleMap = new Map();
-		anonymousPolygonMap = new Map();
+		registeredBoxSet = [];
+		registeredCircleSet = [];
+		registeredPolygonSet = [];
 	}
 
 	//returned key displayObject
-	public function addDisplayObject(physicsObjectType:PhysicsObjectType, displayObjectClass:Class<DisplayObject>):DisplayObject{
+	public function register(physicsObjectType:PhysicsObjectType, displayObjectClass:Class<DisplayObject>):DisplayObject{
 
 		var displayObject = Type.createInstance(displayObjectClass, []);
-		getSet(physicsObjectType).push(displayObject);
+		getRegisteredSet(physicsObjectType).push(displayObject);
 		return displayObject;
 	}
-	private function getSet(physicsObjectType:PhysicsObjectType):Array<DisplayObject>{
+	private function getRegisteredSet(physicsObjectType:PhysicsObjectType):Array<DisplayObject>{
 
 		return switch(physicsObjectType){
-			case PhysicsObjectType.BOX: boxSet;
-			case PhysicsObjectType.CIRCLE: circleSet;
-			case PhysicsObjectType.POLYGON: polygonSet;
+			case PhysicsObjectType.BOX: registeredBoxSet;
+			case PhysicsObjectType.CIRCLE: registeredCircleSet;
+			case PhysicsObjectType.POLYGON: registeredPolygonSet;
 		}
 	}
 
 	//
 	public function execute(){
 
-		createMap(PhysicsObject, boxSet, boxMap, anonymousBoxMap);
-		createMap(PhysicsObject, circleSet, circleMap, anonymousCircleMap);
-		createMap(Polygon, polygonSet, polygonMap, anonymousPolygonMap);
+		createMap(PhysicsObject, registeredBoxSet);
+		createMap(PhysicsObject, registeredCircleSet);
+		createMap(Polygon, registeredPolygonSet);
 	}
-	private function createMap(
-		physicsObjectClass:Class<PhysicsObject>, displayObjectSet:Array<DisplayObject>,
-		map:Map<DisplayObject, Map<DisplayObject, PhysicsObject>>,
-		anonymousMap:Map<DisplayObject, Array<PhysicsObject>>
-	){
-		for(i in 0...displayObjectSet.length){
+	private function createMap(physicsObjectClass:Class<PhysicsObject>, registeredDisplayObjectSet:Array<DisplayObject>){
 
-			var displayObject = displayObjectSet[i];
+		for(i in 0...registeredDisplayObjectSet.length){
+
+			var displayObject = registeredDisplayObjectSet[i];
 
 			var physicsObjectMap:Map<DisplayObject, PhysicsObject> = new Map();
 			map.set(displayObject, physicsObjectMap);
@@ -123,33 +110,11 @@ class FlashToPhysicsObjectParser {
 	}
 
 	//
-	public function getPhysicsObject(physicsObjectType:PhysicsObjectType, keyDisplayObject:DisplayObject, keyDisplayObjectProperty:DisplayObject):PhysicsObject{
-
-		var map = getMap(physicsObjectType);
+	public function getPhysicsObject(keyDisplayObject:DisplayObject, keyDisplayObjectProperty:DisplayObject):PhysicsObject{
 		return map[keyDisplayObject][keyDisplayObjectProperty];
 	}
-	private function getMap(physicsObjectType:PhysicsObjectType):Map<DisplayObject, Map<DisplayObject, PhysicsObject>>{
-
-		return switch(physicsObjectType){
-			case PhysicsObjectType.BOX: boxMap;
-			case PhysicsObjectType.CIRCLE: circleMap;
-			case PhysicsObjectType.POLYGON: polygonMap;
-		}
-	}
-
-	//
-	public function getAnonymousPhysicsObjectSet(physicsObjectType:PhysicsObjectType, keyDisplayObject:DisplayObject):Array<PhysicsObject>{
-
-		var map = getAnonymousMap(physicsObjectType);
-		return map[keyDisplayObject];
-	}
-	private function getAnonymousMap(physicsObjectType:PhysicsObjectType):Map<DisplayObject, Array<PhysicsObject>>{
-
-		return switch(physicsObjectType){
-			case PhysicsObjectType.BOX: anonymousBoxMap;
-			case PhysicsObjectType.CIRCLE: anonymousCircleMap;
-			case PhysicsObjectType.POLYGON: anonymousPolygonMap;
-		}
+	public function getAnonymousPhysicsObjectSet(keyDisplayObject:DisplayObject):Array<PhysicsObject>{
+		return anonymousMap[keyDisplayObject];
 	}
 }
 
