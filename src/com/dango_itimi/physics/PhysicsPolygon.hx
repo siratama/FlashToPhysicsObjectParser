@@ -8,7 +8,7 @@ import flash.geom.Point;
 import flash.display.MovieClip;
 #end
 
-class Polygon extends PhysicsObject {
+class PhysicsPolygon extends PhysicsObject {
 
 	//vertex property name is 'VERTEX_MOVIE_CLIP_HEAD_NAME + number'
 	//ex) p0, p1, p2, ...

@@ -2,7 +2,7 @@ package;
 import sample.polygon.SamplePolygon;
 import sample.circle.SampleCircle;
 import sample.box.SampleBox;
-import com.dango_itimi.physics.Polygon;
+import com.dango_itimi.physics.PhysicsPolygon;
 import com.dango_itimi.physics.PhysicsObject;
 import com.dango_itimi.physics.PhysicsObjectType;
 import com.dango_itimi.physics.FlashToPhysicsObjectParser;
@@ -37,15 +37,15 @@ class Main {
 	//
 	private function addBox(){
 
-		sampleBox = cast flashToPhysicsObjectParser.register(PhysicsObjectType.BOX, SampleBox);
+		sampleBox = flashToPhysicsObjectParser.register(PhysicsObjectType.BOX, SampleBox);
 	}
 	private function addCircle(){
 
-		sampleCircle = cast flashToPhysicsObjectParser.register(PhysicsObjectType.CIRCLE, SampleCircle);
+		sampleCircle = flashToPhysicsObjectParser.register(PhysicsObjectType.CIRCLE, SampleCircle);
 	}
 	private function addPolygon(){
 
-		samplePolygon = cast flashToPhysicsObjectParser.register(PhysicsObjectType.POLYGON, SamplePolygon);
+		samplePolygon = flashToPhysicsObjectParser.register(PhysicsObjectType.POLYGON, SamplePolygon);
 	}
 
 	//
@@ -84,7 +84,7 @@ class Main {
 
 		trace("---");
 
-		var polygon:Polygon;
+		var polygon:PhysicsPolygon;
 		polygon = cast flashToPhysicsObjectParser.getPhysicsObject(samplePolygon, samplePolygon.polygon0);
 		trace(polygon);
 

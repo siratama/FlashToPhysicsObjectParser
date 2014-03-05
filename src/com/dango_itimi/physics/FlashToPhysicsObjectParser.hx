@@ -37,7 +37,7 @@ class FlashToPhysicsObjectParser {
 	}
 
 	//returned key displayObject
-	public function register(physicsObjectType:PhysicsObjectType, displayObjectClass:Class<DisplayObject>):DisplayObject{
+	@:generic public function register<T:DisplayObject>(physicsObjectType:PhysicsObjectType, displayObjectClass:Class<T>):T{
 
 		var displayObject = Type.createInstance(displayObjectClass, []);
 		getRegisteredSet(physicsObjectType).push(displayObject);
@@ -57,7 +57,7 @@ class FlashToPhysicsObjectParser {
 
 		createMap(PhysicsObject, registeredBoxSet);
 		createMap(PhysicsObject, registeredCircleSet);
-		createMap(Polygon, registeredPolygonSet);
+		createMap(PhysicsPolygon, registeredPolygonSet);
 	}
 	private function createMap(physicsObjectClass:Class<PhysicsObject>, registeredDisplayObjectSet:Array<DisplayObject>){
 
