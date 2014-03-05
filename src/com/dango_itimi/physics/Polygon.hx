@@ -48,7 +48,7 @@ class Polygon extends PhysicsObject {
 		return str;
 	}
 
-	@:generic public function convertVertices<T:{function new(x:Float, y:Float):Void;}>(convertedClass:Class<T>){
+	@:generic public function convertVertices<T:{function new(x:Float, y:Float):Void;}>(convertedClass:Class<T>):Array<T>{
 
 		return [
 			for(vertex in vertices) Type.createInstance(convertedClass, [vertex.x, vertex.y])
