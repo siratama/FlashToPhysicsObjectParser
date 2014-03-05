@@ -22,9 +22,9 @@ class FlashToPhysicsObjectParser {
 	// HTML5 canvas document: "instance" or "instance" + "_" + "SerialNumber"
 	private static inline var ANONYMOUS_INSTANCE:String = "instance";
 
-	public var registeredBoxSet:Array<DisplayObject>;
-	public var registeredCircleSet:Array<DisplayObject>;
-	public var registeredPolygonSet:Array<DisplayObject>;
+	private var registeredBoxSet:Array<DisplayObject>;
+	private var registeredCircleSet:Array<DisplayObject>;
+	private var registeredPolygonSet:Array<DisplayObject>;
 
 	public function new(){
 
