@@ -47,4 +47,13 @@ class Polygon extends PhysicsObject {
 		str += "}";
 		return str;
 	}
+
+	public function convertVertices<T>(convertedClass:Class<T>):Array<T>{
+
+		return [
+			for(vertex in vertices) Type.createInstance(convertedClass, [vertex.x, vertex.y])
+		];
+	}
 }
+
+
