@@ -1,0 +1,19 @@
+-swf deploy/main.swf
+-main MainForFlash
+-swf-version 11
+-swf-header 400:300:24:000000
+-swf-lib fla/assets.swf
+-cp ../src
+-cp src/app
+-cp src/flash_extern
+--no-output
+
+--next
+
+-js deploy/main.js
+-main MainForJS
+-cp ../src
+-cp src/app
+-cp src/createjs
+-lib createjs
+--no-output
