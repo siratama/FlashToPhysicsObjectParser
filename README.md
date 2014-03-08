@@ -1,11 +1,12 @@
+<link href="document/style.css" rel="stylesheet"></link>
+
 FlashToPhysicsObjectParser
 =============================
 
 FlashToPhysicsObjectParser は、Flash Professional CC のシンボル内 各数値(幅・高さ・配置位置・回転角度・頂点座標)を物理演算ライブラリ用に抽出する Haxe ライブラリです。
 
-![アプリケーション概要](img/overview.png)
+![アプリケーション概要](document/overview.png)
 
----
 ## 機能
 
 ### 名前を設定していない匿名シンボルを解析
@@ -18,7 +19,6 @@ swf の他、やや独特なフォーマットの HTML5 Canvas 用出力デー�
 
 [https://github.com/nickalie/CreateJS-Haxe](https://github.com/nickalie/CreateJS-Haxe)
 
----
 ## 矩形シンボル Box の設定
 
 矩形シンボルを FlashToPhysicsObjectParser にて解析する手順を記述します。サンプルファイルと合わせてご確認ください。
@@ -34,29 +34,29 @@ Flash CC の出力素材データを Haxe から簡単に利用するため、�
 
 Flash ファイル assets.fla を作成します。
 
-#### (a) ライブラリ内に sample/box/SampleBox ムービークリップを作成
+#### ライブラリ内に sample/box/SampleBox ムービークリップを作成
 
-![rectangle setting 1](img/usage1.png)
+![rectangle setting 1](document/usage1.png)
 
-#### (b) sample/box/SampleBox ムービークリップ内に矩形シンボルを配置
+#### sample/box/SampleBox ムービークリップ内に矩形シンボルを配置
 
-![rectangle setting 2](img/usage2.png)
+![rectangle setting 2](document/usage2.png)
 
 スクリプトで制御したい矩形シンボルにはプロパティ名を設定します。ここでは floor という名前を設定します。
 
-#### (c) sample/box/SampleBox ムービークリップにリンケージ設定
+#### sample/box/SampleBox ムービークリップにリンケージ設定
 
-![rectangle setting 3](img/usage3.png)
+![rectangle setting 3](document/usage3.png)
 
 拡張機能 Linkage を利用して、SampleBox ムービークリップにリンケージ設定を行います。
 
-#### (d) リンケージ設定を行ったムービークリップの構造を Haxe ファイルに出力
+#### リンケージ設定を行ったムービークリップの構造を Haxe ファイルに出力
 
-![rectangle setting 4](img/usage4.png)
+![rectangle setting 4](document/usage4.png)
 
 拡張機能 FlashToHaxeConverter を利用して SampleBox ムービークリップの構造を Haxe ファイルに出力します。
 
-#### (e) swf パブリッシュ
+#### swf パブリッシュ
 
 Flash CC のパブリッシュコマンドで assets.swf ファイルを出力します。Haxe のコンパイラオプション -swf-lib 指定で assets.swf を指定します。
 
@@ -94,19 +94,17 @@ PhysicsObject インスタンスには floor シンボルの位置情報や幅�
 	for(anonymousPhysicsObject in anonymousSet)
 		trace(anonymousPhysicsObject);
 
----
 ## 正円 Circle の設定
 
 矩形 Box と設定方法はほぼ同じのため、説明は省略します。
 
----
 ## 頂点座標の集合体 Polygon の設定
 
 ### オーサリングルール
 
 頂点座標となるムービークリップ名は、デフォルトでは「p」+「数字」の 0 から始まる連番にする必要があります。詳しくは sample/fla/assets.fla ファイル内　sample/polygon/SamplePolygon ムービークリップをご参考ください。
 
-![polygon rule](img/polygon.png)
+![polygon rule](document/polygon.png)
 
 頭文字「p」の文字は、PhysicsPolygon クラス内 VERTEX_MOVIE_CLIP_HEAD_NAME に定義しています。
 
