@@ -1,4 +1,4 @@
-<link href="https://raw.github.com/siratama/FlashToPhysicsObjectParser/master/document/style.css" rel="stylesheet"></link>
+<link href="document/style.css" rel="stylesheet"></link>
 
 FlashToPhysicsObjectParser
 =============================
