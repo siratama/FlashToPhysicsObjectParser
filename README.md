@@ -1,84 +1,86 @@
-<link href="document/style.css" rel="stylesheet"></link>
-
 FlashToPhysicsObjectParser
 =============================
 
-FlashToPhysicsObjectParser は、Flash Professional CC のシンボル内 各数値(幅・高さ・配置位置・回転角度・頂点座標)を物理演算ライブラリ用に抽出する Haxe ライブラリです。
+document language [[English](README.md)] | [[Japanese]](README_jp.md)
+
+FlashToPhysicsObjectParser is a Haxe library which parses the symbol data(x, y, width, height, rotation, vertices) of Flash Professional CC to physics engine. 
 
 ![アプリケーション概要](document/overview.png)
 
-## 機能
+---
+## Features
 
-### 名前を設定していない匿名シンボルを解析
+### Parse of an anonymity symbol 
 
-プロパティ名を設定したシンボルの他、プロパティ名を設定していない匿名シンボルの解析も行えます。ゲームの障害物といった、スクリプト操作を行う必要のない ただ配置するだけの静的なオブジェクト等に利用できます。
+The anonymity symbol which has not set the property name besides the symbol which set the property name is parsed. It can use for the static object which does not need to control and to arrange. 
 
-### HTML5 Canvas ドキュメントから出力されたデータの解析
+### Parse of the data outputted from HTML5 Canvas Document
 
-swf の他、やや独特なフォーマットの HTML5 Canvas 用出力データ(CreateJS用データ)の解析を行えます。HTML5 Canvas 用出力データを解析するためには、以下の Haxe-CreateJS ライブラリをクラスパスに追加する必要があります。
+HTML5 Canvas outputted data(for CreateJS) of a peculiar format besides swf is parsable. In order to parse HTML5 Canvas outputted data, it is necessary to set the following libraries as a class path. 
 
 [https://github.com/nickalie/CreateJS-Haxe](https://github.com/nickalie/CreateJS-Haxe)
 
-## 矩形シンボル Box の設定
+---
+## How to parse a rectangle symbol(Box)
 
-矩形シンボルを FlashToPhysicsObjectParser にて解析する手順を記述します。サンプルファイルと合わせてご確認ください。
+How to analyze a rectangle symbol is described using FlashToPhysicsObjectParser. Please check together with a sample file. 
 
-### 前準備
+### Preparation
 
-Flash CC の出力素材データを Haxe から簡単に利用するため、以下二つの JSFL(Flash CC 拡張機能) をインストールします。
+In order to use Flash CC outputted data simply in Haxe, please install two following JSFL(Flash CC Extentions). 
 
 * [FlashToHaxeConverter](https://github.com/siratama/Flash-To-Haxe-Converter)
 * [Linkage](https://github.com/siratama/Linkage)
 
-### オーサリング
+### Authoring
 
-Flash ファイル assets.fla を作成します。
+Create assets.fla.
 
-#### ライブラリ内に sample/box/SampleBox ムービークリップを作成
+#### (a) sample/box/SampleBox is created in a library
 
 ![rectangle setting 1](document/usage1.png)
 
-#### sample/box/SampleBox ムービークリップ内に矩形シンボルを配置
+#### (b) A rectangle symbol is arranged in sample/box/SampleBox
 
 ![rectangle setting 2](document/usage2.png)
 
-スクリプトで制御したい矩形シンボルにはプロパティ名を設定します。ここでは floor という名前を設定します。
+A property name is set to a rectangle symbol to control by a script. For example, the name 'floor' is set up. 
 
-#### sample/box/SampleBox ムービークリップにリンケージ設定
+#### (c) Linkage is set as sample/box/SampleBox MovieClip
 
 ![rectangle setting 3](document/usage3.png)
 
-拡張機能 Linkage を利用して、SampleBox ムービークリップにリンケージ設定を行います。
+Linkage is set as SampleBox MovieClip using Linkage extension.
 
-#### リンケージ設定を行ったムービークリップの構造を Haxe ファイルに出力
+#### (d) The structure of the MovieClip which set up linkage is outputted to a Haxe file. 
 
 ![rectangle setting 4](document/usage4.png)
 
-拡張機能 FlashToHaxeConverter を利用して SampleBox ムービークリップの構造を Haxe ファイルに出力します。
+The structure of a MovieClip is outputted to a Haxe file using FlashToHaxeConverter extention. 
 
-#### swf パブリッシュ
+#### (e) Publish swf
 
-Flash CC のパブリッシュコマンドで assets.swf ファイルを出力します。Haxe のコンパイラオプション -swf-lib 指定で assets.swf を指定します。
+assets.swf is outputted by the publication command of Flash CC. assets.swf is specified by -swf-lib of the compiler option of Haxe. 
 
-### FlashToPhysicsObjectParser の利用
+### Using FlashToPhysicsObjectParser
 
-Haxe でプログラミングを行います。まずは FlashToPhysicsObjectParser クラスのインスタンスを生成します。
+It programs by Haxe. First of all, the instance of a FlashToPhysicsObjectParser class is created. 
 
 	var flashToPhysicsObjectParser = new FlashToPhysicsObjectParser();
 
-次に register メソッドで解析対象のムービークリップを登録します。SampleBox は矩形として解析を行うため、PhysicsObjectType.BOX を第一引数に指定します。SampleBox クラスは FlashToHaxeConverter で出力されたクラスファイルです。register メソッドは第二引数で指定したクラスインスタンスを返却するので保持しておきます。
+Next, the MovieClip to parse is registered using a register method. Since SampleBox parses as a rectangle, PhysicsObjectType.BOX is specified as the first argument. SampleBox class is the class file outputted by FlashToHaxeConverter. Since a register method returns the class instance specified by the second argument, it has. 
 
 	var sampleBox:SampleBox = flashToPhysicsObjectParser.register(PhysicsObjectType.BOX, SampleBox);
 
-登録完了後 execute メソッドで解析を行います。
+An execute method is performed after the completion of registration. 
 
 	flashToPhysicsObjectParser.execute();
 
-解析後は、getPhysicsObject メソッドを呼び出すことで、矩形データとして各数値が抽出された PhysicsObject インスタンスを取得できます。Flash CC で floor というプロパティ名で設定したシンボルを取得するには、以下の様な指定を行います。FlashToHaxeConverter 経由で出力された SampleBox クラス内には floor プロパティが用意されています。
+PhysicsObject instance from which each numerical value was extracted as rectangle data is gettable by calling getPhysicsObject method after execution. The following scripts are written in order to get the symbol of the property name 'floor' set up by Flash CC. 'floor' property is defined in the class of SampleBox outputted by FlashToHaxeConverter. 
 
 	var physicsObject = flashToPhysicsObjectParser.getPhysicsObject(sampleBox, sampleBox.floor);
 
-PhysicsObject インスタンスには floor シンボルの位置情報や幅・高さ等の各データが解析されています。これら各数値を利用して、物理演算ライブラリのオブジェクト生成を行います。
+The data of the position information on 'floor' symbol, width, height, etc. is parsed by PhysicsObject instance. The object of a physics engine library is created using these figures. 
 
 	trace(physicsObject);
 	//x: 52
@@ -88,54 +90,56 @@ PhysicsObject インスタンスには floor シンボルの位置情報や幅�
 	//degree: -55.704...
 	//radian: -0.9721...
 
-プロパティ名を設定していないシンボルは getAnonymousPhysicsObjectSet メソッドで取得可能です。
+The symbol which has not set up the property name is gettable by getAnonymousPhysicsObjectSet method. 
 
 	var anonymousSet = flashToPhysicsObjectParser.getAnonymousPhysicsObjectSet(sampleBox);
 	for(anonymousPhysicsObject in anonymousSet)
 		trace(anonymousPhysicsObject);
 
-## 正円 Circle の設定
+---
+## How to parse a perfect circle
 
-矩形 Box と設定方法はほぼ同じのため、説明は省略します。
+Since it is the same, a rectangle and the setting method are omitted. 
 
-## 頂点座標の集合体 Polygon の設定
+---
+## How to parse vertices(Polygon)
 
-### オーサリングルール
+### Authoring Rule
 
-頂点座標となるムービークリップ名は、デフォルトでは「p」+「数字」の 0 から始まる連番にする必要があります。詳しくは sample/fla/assets.fla ファイル内　sample/polygon/SamplePolygon ムービークリップをご参考ください。
+It is necessary to make the vertex MovieClip name into the consecutive numbers which begin from 0 of a 'p'+'number'. For details, please refer to sample/polygon/SamplePolygon MovieClip in sample/fla/assets.fla file. 
 
 ![polygon rule](document/polygon.png)
 
-頭文字「p」の文字は、PhysicsPolygon クラス内 VERTEX_MOVIE_CLIP_HEAD_NAME に定義しています。
+Initial 'p' is defined as VERTEX_MOVIE_CLIP_HEAD_NAME in PhysicsPolygon class. 
 
 	public static var VERTEX_MOVIE_CLIP_HEAD_NAME:String = "p";
 
-以下のように変更する事が可能です。
+It can change as follows. 
 
 	PhsycsPolygon.VERTEX_MOVIE_CLIP_HEAD_NAME = "a";
 
-ムービークリッププロパティ名のルールから、頭文字として英文字をかならず設定する必要があります。
+It is necessary to make the initial into an English character from the property name rule of a MovieClip. 
 
-### 頂点座標クラス変換
+### Conversion of vertex class
 
-FlashToPhysicsObjectParser.getPhysicsObject メソッドの戻り値を cast して PhysicsPolygon として取得します。
+The return value of FlashToPhysicsObjectParser.getPhysicsObject method is cast and it gets as PhysicsPolygon. 
 
 	var polygon:PhysicsPolygon =
 		cast flashToPhysicsObjectParser.getPhysicsObject(samplePolygon, samplePolygon.flipper);
 
-PhysicsPolygon クラスは、頂点座標 Point(flash.geom.Point or createjs.easeljs.Point)クラスのの配列 vertices を所持しています。
+The PhysicsPolygon class has the arrangement vertices of a vertex Point(flash.geom.Point or createjs.easeljs.Point) class. 
 
 	public var vertices(default, null):Array<Point>;
 
-物理演算ライブラリ Box2D や Nape から頂点座標を利用するためには、Point クラスを B2Vec2(Box2D) or Vec2(Nape) クラスに変換する必要があります。 変換を行うには PhysicsPolygon.convertVertices メソッドを利用します。Array<Point\> を Array<B2Vec2\> or Array<Vec2\> に変換できます。
+In order to use vertex from physics engine library Box2D or Nape, it is necessary to convert a Point class into B2Vec2(Box2D) or Vec2(Nape) class. PhysicsPolygon.convertVertices method is used in order to convert. Array<Point\> is convertible for Array<B2Vec2\> or Array<Vec2\>. 
 
 	var vertices:Array<B2Vec2> = polygon.convertVertices(B2Vec2); //Box2D
 	//var vertices:Array<Vec2> = polygon.convertVertices(Vec2); //Nape
 
-## 物理演算ライブラリ Nape 使用例
+---
+## The example of use of physics engine library Nape
 
-Nape で実際に PhysicsObject を利用してみる例となります。この記述例はサンプルファイルにはありません。
-
+It is an example using PhysicsObject using Nape. This example is not in a sample file. 
 
 ### Box
 
