@@ -131,7 +131,7 @@ The PhysicsPolygon class has the arrangement vertices of a vertex Point(flash.ge
 
 	public var vertices(default, null):Array<Point>;
 
-In order to use vertex from physics engine library Box2D or Nape, it is necessary to convert a Point class into B2Vec2(Box2D) or Vec2(Nape) class. PhysicsPolygon.convertVertices method is used in order to convert. Array<Point\> is convertible for Array<B2Vec2\> or Array<Vec2\>. 
+In order to use vertex from physics engine library Box2D or Nape, it is necessary to convert a Point class into B2Vec2(Box2D) or Vec2(Nape) class. PhysicsPolygon.convertVertices method is used in order to convert. `Array<Point>` is convertible for `Array<B2Vec2>` or `Array<Vec2>`. 
 
 	var vertices:Array<B2Vec2> = polygon.convertVertices(B2Vec2); //Box2D
 	//var vertices:Array<Vec2> = polygon.convertVertices(Vec2); //Nape

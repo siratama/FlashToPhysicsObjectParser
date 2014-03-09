@@ -131,7 +131,7 @@ PhysicsPolygon クラスは、頂点座標 Point(flash.geom.Point or createjs.ea
 
 	public var vertices(default, null):Array<Point>;
 
-物理演算ライブラリ Box2D や Nape から頂点座標を利用するためには、Point クラスを B2Vec2(Box2D) or Vec2(Nape) クラスに変換する必要があります。 変換を行うには PhysicsPolygon.convertVertices メソッドを利用します。Array<Point\> を Array<B2Vec2\> or Array<Vec2\> に変換できます。
+物理演算ライブラリ Box2D や Nape から頂点座標を利用するためには、Point クラスを B2Vec2(Box2D) or Vec2(Nape) クラスに変換する必要があります。 変換を行うには PhysicsPolygon.convertVertices メソッドを利用します。`Array<Point>` を `Array<B2Vec2>` or `Array<Vec2>` に変換できます。
 
 	var vertices:Array<B2Vec2> = polygon.convertVertices(B2Vec2); //Box2D
 	//var vertices:Array<Vec2> = polygon.convertVertices(Vec2); //Nape
