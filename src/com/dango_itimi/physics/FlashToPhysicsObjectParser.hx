@@ -43,6 +43,11 @@ class FlashToPhysicsObjectParser {
 		getRegisteredSet(physicsObjectType).push(displayObject);
 		return displayObject;
 	}
+	//for OpenFL
+	public function registerInstance(physicsObjectType:PhysicsObjectType, displayObject:DisplayObject){
+
+		getRegisteredSet(physicsObjectType).push(displayObject);
+	}
 	private function getRegisteredSet(physicsObjectType:PhysicsObjectType):Array<DisplayObject>{
 
 		return switch(physicsObjectType){
