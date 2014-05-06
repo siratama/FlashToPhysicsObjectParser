@@ -20,7 +20,9 @@ class FlashToPhysicsObjectParser {
 	//Anonymous instance property name
 	// Flash document: "instance" + "Number"
 	// HTML5 canvas document: "instance" or "instance" + "_" + "SerialNumber"
+	// OpenFL native: "MovieClip" + " " + "Number"
 	private static inline var ANONYMOUS_INSTANCE:String = "instance";
+	private static inline var ANONYMOUS_INSTANCE_FOR_OPENFL:String = "MovieClip";
 
 	private var registeredBoxSet:Array<DisplayObject>;
 	private var registeredCircleSet:Array<DisplayObject>;
@@ -91,7 +93,13 @@ class FlashToPhysicsObjectParser {
 
 		for(i in 0...numChildren){
 
+			#if js
 			var shapeInstance:MovieClip = cast container.getChildAt(i);
+			#else
+			var shapeInstance = container.getChildAt(i);
+			if(!Std.is(shapeInstance, MovieClip)) continue;
+			#end
+
 			var instanceName:String = null;
 
 			#if js
@@ -107,7 +115,10 @@ class FlashToPhysicsObjectParser {
 
 			var physicsObject:PhysicsObject = Type.createInstance(physicsObjectClass, [shapeInstance]);
 
-			if(instanceName.indexOf(ANONYMOUS_INSTANCE) != -1)
+
+			if(instanceName.indexOf(
+				#if (js || flash) ANONYMOUS_INSTANCE #else ANONYMOUS_INSTANCE_FOR_OPENFL #end
+			) != -1)
 				anonymousSet.push(physicsObject);
 			else
 				physicsObjectMap.set(shapeInstance, physicsObject);
