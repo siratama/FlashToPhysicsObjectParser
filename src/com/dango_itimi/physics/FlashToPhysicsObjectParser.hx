@@ -45,7 +45,19 @@ class FlashToPhysicsObjectParser {
 		getRegisteredSet(physicsObjectType).push(displayObject);
 		return displayObject;
 	}
-	//for OpenFL
+	public function registerAbstract(physicsObjectType:PhysicsObjectType, displayObjectClass:Class<Dynamic>):Dynamic{
+
+		var displayObject = createInstance(displayObjectClass, []);
+		getRegisteredSet(physicsObjectType).push(displayObject);
+		return displayObject;
+	}
+	//abstract class has _new method
+	private function createInstance<T>(cls:Class<T>, args:Array<Dynamic>):T
+	{
+		return !Lambda.has(Type.getClassFields(cls), "_new") ?
+			Type.createInstance(cast cls, args):
+			Type.createInstance(cast cls, args)._new();
+	}
 	public function registerInstance(physicsObjectType:PhysicsObjectType, displayObject:DisplayObject){
 
 		getRegisteredSet(physicsObjectType).push(displayObject);
